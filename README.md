@@ -26,13 +26,13 @@ Details of the latest version can be found via Git from the [pmikus GitHub](http
 Script can be downloaded from [pmikus GitHub](https://github.com/pmikus/sys-info-suite)
 
 ## Changes
-For the full list of changes please read the [NEWS](https://github.com/pmikus/sys-info-suite/NEWS) file.
+For the full list of changes please read the [NEWS](https://github.com/pmikus/sys-info-suite/blob/master/NEWS) file.
 
 ## License
-Contect of this repository is licensed under GPLv3. Please read the file called [LICENSE](https://github.com/pmikus/sys-info-suite/LICENSE) for full version.
+Contect of this repository is licensed under GPLv3. Please read the file called [LICENSE.md](https://github.com/pmikus/sys-info-suite/blob/master/LICENSE) for full version.
 
 ## Author and contacts
-Peter Mikus <pmikus@cisco.com>. Full list of contributors and co-authors is located in file [AUTHORS.md](https://github.com/pmikus/sys-info-suite/AUTHORS.md)
+Peter Mikus <pmikus@cisco.com>. Full list of contributors and co-authors is located in file [AUTHORS.md](https://github.com/pmikus/sys-info-suite/blob/master/AUTHORS.md)
 
 ## Version
 Collect system information script 1.7.2, released January 2016.
