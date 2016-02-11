@@ -1,6 +1,6 @@
 ### Information Stack architecture
 
-This information stack abstraction is focused on organizing the configuration information to aid the understanding and enable simpler impact assessment on system performance and operation. The configuration information is collected by running the script on a target platform. It also enables a structured comparison (DIFF) of the config information by allowing to focus on particular system layer or information significance class.
+This information stack abstraction is focused on organizing the configuration information to aid the understanding and enable simpler impact assessment on system performance and operation. The configuration information is collected by running the script on a target platform. It also enables a structured comparison (DIFF) of the information by allowing to focus on particular system layer or information significance class.
 
 ```
 +----------------------------------------------------+-------------------------+---+
@@ -94,9 +94,9 @@ This information stack abstraction is focused on organizing the configuration in
 
 ### Global variables
 
-`G_VNET_SLA_SUITE` - List of strings. Representing names of funtions to run. Each function to run is defined in named module in package 'outputs' and same named class. For more convient way the prefix 'output' is omitted and is automatically added when function is called from class `OutputSuite`.
+`G_SUITE` - List of strings. Representing names of functions to run. Each function to run is defined in named module in package 'outputs' and same named class. For more convenient way the prefix 'output' is omitted and is automatically added when function is called from class `OutputSuite`.
 
-`G_VNET_SLA_SUITE_BIOS` - List contains only bios related funtion names to run. Bios functions to run are defined in named module in package 'outputs' and same named class. For more convient way the prefix 'output' is omitted and is automatically added when function is called from class `OutputSuite`.
+`G_SUITE_UCS` - List contains only CIMC related function names to run. CIMC functions to run are defined in named module in package 'outputs' and same named class. For more convenient way the prefix 'output' is omitted and is automatically added when function is called from class `OutputSuite`.
 
 ### Functions
 ##### dtime
@@ -207,36 +207,33 @@ Gets scheduler information from target device. Linux command to run: `cat /sys/k
 ##### cgroup_cpuset
 Gets cgroup CPU information from target device. Linux command to run: `for a in $(find /sys/fs/cgroup/cpuset -type d) ; do echo $a ; echo -n "CPUs = " ; cat $a/cpuset.cpus ; echo -n "MEMs = " ; cat $a/cpuset.mems ; echo -n "PIDs/TIDs = " ; cat $a/tasks | tr '\012' ',' ; echo ; echo ; done`
 
-##### bios_settings
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `biosSettings`
-
 ##### compute_rack_unit
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `computeRackUnit`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `computeRackUnit`
 
 ##### network_adapter_unit
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `networkAdapterUnit`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `networkAdapterUnit`
 
 ##### equipment_psu
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `equipmentPsu`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `equipmentPsu`
 
 ##### equipment_fan_module
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `equipmentFanModule`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `equipmentFanModule`
 
 ##### compute_board
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `computeBoard`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `computeBoard`
 
 ##### mgmt_controller
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `mgmtController`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `mgmtController`
 
 ##### bios_unit
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `biosUnit`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `biosUnit`
 
 ##### pci_equip_slot
-Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and scope is `pciEquipSlot`
+Gets information from Cisco CIMC device via XML API. XML API method is configResolveClass and classId is `pciEquipSlot`
 
 
 ### Modular support
-Script does support external output function definition. External modules have to be specified in subfolder outputs (from python perspective 'package'). This folder has to contain the empty `__init__.py` file so python interpret will recognize it as package. Each external output function definition has to be placed in separate file. File name must match the class name inside the file and also contain prefix 'output_'. Function class is inherited from parent 'OutputsBase' class.
+Script does support external output function definition. External modules have to be specified in sub-folder outputs (from python perspective 'package'). This folder has to contain the empty `__init__.py` file so python interpret will recognize it as package. Each external output function definition has to be placed in separate file. File name must match the class name inside the file and also contain prefix 'output_'. Function class is inherited from parent 'OutputsBase' class.
 
 Each class must contain properties including:
 - `cmd`			Command to run

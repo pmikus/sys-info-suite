@@ -1,8 +1,18 @@
-# Cisco UCS 240 series BIOS settings
+# Cisco UCS 240 namepsace
 
-Following namespace and terminology is derived from documentation of Cisco UCS E-series. Output is obtained from Cisco Integrated Management Controller via [XML API](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/e/api/guide/b_cimc_api_book.html). To get the BIOS settings from Cisco UCS 240 series the script is using 'configResolveClass' method from API: `<configResolveClass cookie='cookie_value' inHierarchical='true' classId='__scope__'/>`, where '__scope__' is section to get. Supported scopes are 'biosSettings' and 'computeRackUnit'. Response is requested managed object in a given class.
+Support classIds:
+- 'networkAdapterUnit': Netowrk adapters
+- 'equipmentPsu': Power supply
+- 'equipmentFanModule': Fan modules
+- 'computeBoard': Full inventory of CPU, Memory, PCI adapters and Storage
+- 'mgmtController': Firmware and management
+- 'biosUnit': BIOS defaults and BIOS current configuration
+- 'pciEquipSlot': PCI equipment
 
-- **Intel Hyper-Threading Technology**: Whether the processor uses Intel Hyper-Threading Technology, which allows multithreaded software applications to execute threads in parallel within each processor. This can be one of the following: 
+## BIOS namepsace
+Based on C240M4.2.0.6a.0.051220151501 version.
+
+- **Intel Hyper-Threading Technology**: Whether the processor uses Intel Hyper-Threading Technology, which allows multithreaded software applications to execute threads in parallel within each processor. This can be one of the following:
 	- *Disabled* — The processor does not permit hyperthreading.
 	- *Enabled* — The processor allows for the parallel execution of multiple threads.
 
@@ -41,7 +51,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 - **Intel VT-d ATS Support**: Whether the processor supports Intel VT-d Address Translation Services (ATS). This can be one of the following:
 	- *Disabled* — The processor does not support ATS.
 	- *Enabled* — The processor uses VT-d ATS as required.
- 
+
 	`<biosVfIntelVTForDirectedIO rn="Intel-VT-for-directed-IO" vpIntelVTDATSSupport="enabled" vpIntelVTDCoherencySupport="disabled" vpIntelVTForDirectedIO="enabled" />`
 
 - **CPU Performance**: Sets the CPU performance profile for the server. The performance profile consists of the following options:
@@ -67,7 +77,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 - **Adjacent Cache Line Prefetcher**: Whether the processor fetches cache lines in even/odd pairs instead of fetching just the required line. This can be one of the following:
 	- *Disabled* — The processor only fetches the required line.
 	- *Enabled* — The processor fetches both the required line and its paired line.
- 
+
 	`<biosVfAdjacentCacheLinePrefetch rn="Adjacent-Cache-Line-Prefetch" vpAdjacentCacheLinePrefetch="enabled" />`
 
 - **DCU Streamer Prefetch**: Whether the processor uses the DCU IP Prefetch mechanism to analyze historical cache access patterns and preload the most relevant lines in the L1 cache. This can be one of the following:
@@ -103,7 +113,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 - **Enhanced Intel Speedstep Technology**: Whether the processor uses Enhanced Intel SpeedStep Technology, which allows the system to dynamically adjust processor voltage and core frequency. This technology can result in decreased average power consumption and decreased average heat production. This can be one of the following:
 	- *Disabled* — The processor never dynamically adjusts its voltage or frequency.
 	- *Enabled* — The processor utilizes Enhanced Intel SpeedStep Technology and enables all supported processor sleep states to further conserve power.
-	
+
 	'Note':
 	Power Technology must be set to Custom or the server ignores the setting for this parameter.
 
@@ -112,7 +122,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 - **Intel Turbo Boost Technology**: Whether the processor uses Intel Turbo Boost Technology, which allows the processor to automatically increase its frequency if it is running below power, temperature, or voltage specifications. This can be one of the following:
 	- *Disabled* — The processor does not increase its frequency automatically.
 	- *Enabled* — The processor utilizes Turbo Boost Technology if required.
-	
+
 	'Note':
 	Power Technology must be set to Custom or the server ignores the setting for this parameter.
 
@@ -121,7 +131,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 - **Processor Power State C6**: Whether the BIOS sends the C6 report to the operating system. When the OS receives the report, it can transition the processor into the lower C6 power state to decrease energy usage while maintaining optimal processor performance. This can be one of the following:
 	- *Disabled* — The BIOS does not send the C6 report.
 	- *Enabled* — The BIOS sends the C6 report, allowing the OS to transition the processor to the C6 low power state.
-	
+
 	'Note':
 	Power Technology must be set to Custom or the server ignores the setting for this parameter.
 
@@ -143,13 +153,13 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 	- *HW_ALL*—The processor hardware is responsible for coordinating the P-state among logical processors with dependencies (all logical processors in a package).
 	- *SW_ALL*—The OS Power Manager (OSPM) is responsible for coordinating the P-state among logical processors with dependencies (all logical processors in a physical package), and must initiate the transition on all of the logical processors.
 	- *SW_ANY*—The OS Power Manager (OSPM) is responsible for coordinating the P-state among logical processors with dependencies (all logical processors in a package), and may initiate the transition on any of the logical processors in the domain.
-	
+
 	'Note':
 	Power Technology must be set to Custom or the server ignores the setting for this parameter.
 
 	`<biosVfPStateCoordType rn="p-state-coord" vpPStateCoordType="HW ALL" />`
 
-- **Energy Performance**: Allows you to determine whether system performance or energy efficiency is more important on this server. This can be one of the following: 
+- **Energy Performance**: Allows you to determine whether system performance or energy efficiency is more important on this server. This can be one of the following:
 	- *Balanced Energy*
 	- *Balanced Performance*
 	- *Energy Efficient*
@@ -183,7 +193,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 
 	`<biosVfNUMAOptimized rn="NUMA-optimized" vpNUMAOptimized="enabled" />`
 
-- **DRAM Refresh rate**: Allows you to set the rate at which the DRAM cells are refreshed. This can be one of the following: 
+- **DRAM Refresh rate**: Allows you to set the rate at which the DRAM cells are refreshed. This can be one of the following:
 	- 1x—DRAM cells are refreshed every 64ms.
 	- 2x—DRAM cells are refreshed every 32ms.
 	- 3x—DRAM cells are refreshed every 21ms.
@@ -264,20 +274,20 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 
 	`<biosVfUSBPortsConfig rn="USB-Ports-Config" vpAllUsbDevices="enabled" vpUsbPortFront="enabled" vpUsbPortInternal="enabled" vpUsbPortKVM="enabled" vpUsbPortRear="enabled" vpUsbPortSDCard="enabled" vpUsbPortVMedia="enabled" />`
 
-- **USB Port**: Rear: Whether the rear panel USB devices are enabled or disabled. This can be one of the following: 
+- **USB Port**: Rear: Whether the rear panel USB devices are enabled or disabled. This can be one of the following:
 	- *Disabled* — Disables the rear panel USB ports. Devices connected to these ports are not detected by the BIOS and operating system.
 	- *Enabled* — Enables the rear panel USB ports. Devices connected to these ports are detected by the BIOS and operating system.
 
 	`<biosVfUSBPortsConfig rn="USB-Ports-Config" vpAllUsbDevices="enabled" vpUsbPortFront="enabled" vpUsbPortInternal="enabled" vpUsbPortKVM="enabled" vpUsbPortRear="enabled" vpUsbPortSDCard="enabled" vpUsbPortVMedia="enabled" />`
 
-- **USB Port: Front**: Whether the front panel USB devices are enabled or disabled. This can be one of the following: 
-	- *Disabled* — Disables the front panel USB ports. Devices connected to these ports are not detected by the BIOS and operating system. 
-	- *Enabled* — Enables the front panel USB ports. Devices connected to these ports are detected by the BIOS and operating system. 
+- **USB Port: Front**: Whether the front panel USB devices are enabled or disabled. This can be one of the following:
+	- *Disabled* — Disables the front panel USB ports. Devices connected to these ports are not detected by the BIOS and operating system.
+	- *Enabled* — Enables the front panel USB ports. Devices connected to these ports are detected by the BIOS and operating system.
 
 	`<biosVfUSBPortsConfig rn="USB-Ports-Config" vpAllUsbDevices="enabled" vpUsbPortFront="enabled" vpUsbPortInternal="enabled" vpUsbPortKVM="enabled" vpUsbPortRear="enabled" vpUsbPortSDCard="enabled" vpUsbPortVMedia="enabled" />`
 
-- **USB Port: Internal**: Whether the internal USB devices are enabled or disabled. This can be one of the following: 
-	- *Disabled* — Disables the internal USB ports. Devices connected to these ports are not detected by the BIOS and operating system. 
+- **USB Port: Internal**: Whether the internal USB devices are enabled or disabled. This can be one of the following:
+	- *Disabled* — Disables the internal USB ports. Devices connected to these ports are not detected by the BIOS and operating system.
 	- *Enabled* — Enables the internal USB ports. Devices connected to these ports are detected by the BIOS and operating system.
 
 	`<biosVfUSBPortsConfig rn="USB-Ports-Config" vpAllUsbDevices="enabled" vpUsbPortFront="enabled" vpUsbPortInternal="enabled" vpUsbPortKVM="enabled" vpUsbPortRear="enabled" vpUsbPortSDCard="enabled" vpUsbPortVMedia="enabled" />`
@@ -308,7 +318,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 
 	`<biosVfMemoryMappedIOAbove4GB rn="Memory-mapped-IO-above-4GB" vpMemoryMappedIOAbove4GB="disabled" />`
 
-- **MMCFG BASE**: Sets the low base address for PCIe adapters within 4GB. This can be one of the following: 
+- **MMCFG BASE**: Sets the low base address for PCIe adapters within 4GB. This can be one of the following:
 	- *1 GB*
 	- *2 GB*
 	- *2.5 GB*
@@ -339,17 +349,17 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 	- *Disabled* — No console redirection occurs during POST.
 	- *COM 0* — Enables console redirection on COM port 0 during POST.
         - *COM 1* — Enables console redirection on COM port 1 during POST.
- 
+
 	`<biosVfConsoleRedirection rn="Console-redirection" vpBaudRate="115200" vpConsoleRedirection="disabled" vpFlowControl="none" vpPuttyKeyPad="ESCN" vpRedirectionAfterPOST="Always Enable" vpTerminalType="vt100" />`
 
-- **Terminal Type**: What type of character formatting is used for console redirection. This can be one of the following: 
+- **Terminal Type**: What type of character formatting is used for console redirection. This can be one of the following:
 	- *PC-ANSI* — The PC-ANSI terminal font is used.
 	- *VT100* — A supported vt100 video terminal and its character set are used.
 	- *VT100+* — A supported vt100-plus video terminal and its character set are used.
 	- *VT-UTF8* — A video terminal with the UTF-8 character set is used.
 	Note
 	This setting must match the setting on the remote terminal application.
- 
+
 	`<biosVfConsoleRedirection rn="Console-redirection" vpBaudRate="115200" vpConsoleRedirection="disabled" vpFlowControl="none" vpPuttyKeyPad="ESCN" vpRedirectionAfterPOST="Always Enable" vpTerminalType="vt100" />`
 
 - **Bits per second**: What BAUD rate is used for the serial port transmission speed. If you disable Console Redirection, this option is not available. This can be one of the following:
@@ -378,13 +388,13 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 	- *SCO* — The function keys F1 to F12 generate ESC [M through ESC [X. The function and shift keys generate ESC [Y through ESC [j. The control and function keys generate ESC [k through ESC [v. The shift, control and function keys generate ESC [w through ESC [{.
 	- *ESCN* — The default mode. The function keys match the general behavior of Digital terminals. The function keys generate sequences such as ESC [11~ and ESC [12~.
 	- *VT400* — The function keys behave like the default mode. The top row of the numeric keypad generates ESC OP through ESC OS.
- 
+
 	`<biosVfConsoleRedirection rn="Console-redirection" vpBaudRate="115200" vpConsoleRedirection="disabled" vpFlowControl="none" vpPuttyKeyPad="ESCN" vpRedirectionAfterPOST="Always Enable" vpTerminalType="vt100" />`
 
 - **Redirection After BIOS POST**: Whether BIOS console redirection should be active after BIOS POST is complete and control given to the OS bootloader. This can be one of the following:
 	- *Always Enable* — BIOS Legacy console redirection is active during the OS boot and run time.
 	- *Bootloader* — BIOS Legacy console redirection is disabled before giving control to the OS boot loader.
- 
+
 	`<biosVfConsoleRedirection rn="Console-redirection" vpBaudRate="115200" vpConsoleRedirection="disabled" vpFlowControl="none" vpPuttyKeyPad="ESCN" vpRedirectionAfterPOST="Always Enable" vpTerminalType="vt100" />`
 
 - **Out-of-Band Mgmt Port**: Allows you to configure the COM port 0 that can be used for Windows Emergency Management services. ACPI SPCR table is reported based on this setup option. This can be one of the following:
@@ -451,7 +461,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 	- *Enabled* — The server uses the TPM.
 	Note
 	We recommend that you contact your operating system vendor to make sure the operating system supports this feature.
- 
+
  	`<biosVfTPMSupport rn="TPM-Support" vpTPMSupport="disabled" />`
 
 - **FRB-2 Timer**: Whether the FRB2 timer is used by Cisco IMC to recover the system if it hangs during POST. This can be one of the following:
@@ -470,7 +480,7 @@ Following namespace and terminology is derived from documentation of Cisco UCS E
 	- *5 Minutes* — The watchdog timer expires 5 minutes after the OS begins to boot.
 	- *10 Minutes* — The watchdog timer expires 10 minutes after the OS begins to boot.
 	- *15 Minutes* — The watchdog timer expires 15 minutes after the OS begins to boot.
-	- *20 Minutes* — The watchdog timer expires 20 minutes after the OS begins to boot. 
+	- *20 Minutes* — The watchdog timer expires 20 minutes after the OS begins to boot.
 	Note
 	This option is only applicable if you enable the OS Boot Watchdog Timer.
 

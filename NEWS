@@ -1,3 +1,7 @@
+v2.0.0
+-----------------
+    * Code maintenance for public release
+
 v1.7.2
 -----------------
     + New option to specify SSH key file for authentication
@@ -12,13 +16,13 @@ v1.7.0
 
 v1.6.1
 -----------------
-    + Python 3.5 compatible
+    * Python 3.5 compatible
     + Checksum of output
 
 v1.6.0
 -----------------
     + Added list of available functions option
-    + Remove internal functions, supporting only external modules
+    - Remove internal functions, supporting only external modules
     * PyLINT compliance
     # Bug fixes
 

@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'sys-info-suite',
   packages = ['sys-info-suite'],
-  version = '1.7.1',
+  version = '2.0.0',
   description = 'System information collecting script',
   author = 'Peter Mikus',
   author_email = 'pmikus@cisco.com',
