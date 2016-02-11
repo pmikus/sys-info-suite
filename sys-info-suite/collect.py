@@ -247,7 +247,7 @@ class Printer(object):
 class ProcessCall(object):
     """Handles sub-processes/SSH/HTTP calls"""
     def __init__(self, host, username, password, keyfile):
-        # pylint: disable=R0246
+        # pylint: disable=R0247
         self.child_stdout = ''
         self.child_stat = 0
         self.child_stderr = ''
@@ -285,7 +285,7 @@ class ProcessCall(object):
         except OSError as ex_error:
             self.child_stat = 255
             G_LOGGER.critical('Subprocess open exception: %s', ex_error)
-    # pylint: disable=R0287
+    # pylint: disable=R0289
     def proc_remote(self, cmd, host, username, password, keyfile):
         """Create SSH session and run the command"""
         try:
