@@ -1,0 +1,104 @@
+v1.7.2
+-----------------
+    + New option to specify SSH key file for authentication
+
+v1.7.1
+-----------------
+    # Bug fixes
+
+v1.7.0
+-----------------
+    + New presentation layer with stack architecture, readme file for more details
+
+v1.6.1
+-----------------
+    + Python 3.5 compatible
+    + Checksum of output
+
+v1.6.0
+-----------------
+    + Added list of available functions option
+    + Remove internal functions, supporting only external modules
+    * PyLINT compliance
+    # Bug fixes
+
+v1.5.0
+-----------------
+    + Interactive mode with option to save configuration file
+    + Load, save configuration file support
+    # Bug fixes
+
+v1.4.3
+-----------------
+    * Prepare work for interactive mode
+    * Prepare work for configuration file mode
+    + Modular architecture improvement
+    + Module Output_Time as sample module published
+    + Command line arguments are now easier to understand and simplified
+    + time, rhel_release, centos_release, kernel_version functions are now parsed into XML
+    # Bug fixed
+
+v1.4.2
+-----------------
+    + New alternative grub output
+    + OS/RHEL/CentOS release information
+    + Fixed sudo commands and OVS commands
+    + Check command option
+
+v1.4.1
+-----------------
+    # Bug fixes
+
+v1.4.0
+-----------------
+    + New service status output
+    + New ethtool output
+    + Suport for external modules
+
+v1.3.4
+-----------------
+    + New BIOS output "computeRackUnit"
+
+v1.3.3
+-----------------
+    + Added code to be able to get more BIOS outputs in future release
+    # Bug fix
+
+v1.3.2
+-----------------
+    + Added new commands to run on target device: list of running processes, vpp configuration (qn.conf), yum list installed
+    + Several minor changes in code according to PEP8
+    + SSH optimization to use open session if exists
+
+v1.3.0
+-----------------
+    + Added new command line options and replace optarg library that is parsing
+    it with argparse.
+    + Replacing xml minidom library with cElementTree that is wrapped C library
+    and is blazing fast with less code.
+    + XML outputs from commands are appended into main XML output tree for
+    better handling.
+    # Bug fixes
+
+v1.2.1
+-----------------
+    + New XML presentation form output with CDATA sections for handlig CLOBs.
+    + Optimizations.
+
+v1.1.1
+-----------------
+    + Preparation for host/password manager via configuration or interactive mode.
+    + Paramiko lib is default default SSH handler.
+    # Bug fixes
+
+v1.1.0
+-----------------
+    + BIOS settings retrive from CIMC via XML API.
+    + New output format optimized for future post processing.
+    + Paramiko SSH python library detection with geting help how to install.
+    + Added new suite for BIOS output.
+    - JSON code removed (will be added in newer version)
+
+v1.0.0
+-----------------
+    + Initial version of script.
