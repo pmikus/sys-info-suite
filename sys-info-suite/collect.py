@@ -246,12 +246,12 @@ class Printer(object):
 
 class ProcessCall(object):
     """Handles sub-processes/SSH/HTTP calls"""
-    child_stdout = ''
-    child_stat = 0
-    child_stderr = ''
-    ssh = ''
-
     def __init__(self, host, username, password, keyfile):
+        # pylint: disable=R0902
+        self.child_stdout = ''
+        self.child_stat = 0
+        self.child_stderr = ''
+        self.ssh = ''
         self.host = host
         self.username = username
         self.password = password
