@@ -1,6 +1,7 @@
 # System information suite
 
 - [What is it?](#what-is-it)
+<<<<<<< HEAD
 
 - [The Latest Version](#the-latest-version)
 
@@ -22,11 +23,27 @@
 
 - [Author and contacts](#author-and-contacts)
 
+=======
+- [The Latest Version](#the-latest-version)
+- [Downloading](#downloading)
+- [Prerequisities](#prerequisities)
+- [Implementation](#implementation)
+- [Configuration file](#configuration-file)
+- [Output](#output)
+- [Usage](#usage)
+- [Changes](#changes)
+- [License](#license)
+- [Author and contacts](#author-and-contacts)
+>>>>>>> ee859c020ca1e0011fda336503c00cb723f7d2cb
 - [Version](#version)
 
 
 ##  What is it?
+<<<<<<< HEAD
 Collect system information suite is Python written collection of scripts to gather, collect and analyze system information from local or remote system running Linux operating system. Output of the script is XML structured stack of information about running environment.
+=======
+Collect system information suite is Python written collection of scripts to gather, collect and analyze information from local or remote system running linux. It is lightweight portable and extendible. 
+>>>>>>> ee859c020ca1e0011fda336503c00cb723f7d2cb
 
 
 ## The Latest Version
@@ -34,6 +51,7 @@ Details of the latest version can be found via Git from the [pmikus GitHub](http
 
 
 ## Downloading
+<<<<<<< HEAD
 Script can be downloaded from [pmikus GitHub](https://github.com/pmikus/sys-info-suite).
 
 
@@ -213,6 +231,9 @@ Example of running diff.py script to compare two files: select all function elem
 ```
 ./sys_info/diff.py --first host1.xml --second host2.xml --xpath "//section/function[contains(@significance, '1')]"
 ```
+=======
+Script can be downloaded from [pmikus GitHub](https://github.com/pmikus/sys-info-suite)
+>>>>>>> ee859c020ca1e0011fda336503c00cb723f7d2cb
 
 ## Changes
 For the full list of changes please read the [NEWS](https://github.com/pmikus/sys-info-suite/blob/master/NEWS) file.
