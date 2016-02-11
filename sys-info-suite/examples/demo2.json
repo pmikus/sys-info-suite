@@ -1,0 +1,17 @@
+{
+    "linux-admin": {
+        "user": "name",
+        "device_type": "cimc",
+        "suite": [
+            "network_adapter_unit",
+            "equipment_psu",
+            "equipment_fan_module",
+            "compute_board",
+            "mgmt_controller",
+            "bios_unit",
+            "pci_equip_slot"],
+        "device": "linux-admin",
+        "output": "linux-admin.xml",
+        "password": "password"
+    },
+}
