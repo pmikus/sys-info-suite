@@ -218,7 +218,8 @@ class Printer(object):
                     output.append(exec_output)
                 else:
                     exec_output = ET.Element("exec_output")
-                    exec_output.text = "<![CDATA[\n"+str(i[7]).decode('utf-8')+"]]>"
+                    exec_output.text = "<![CDATA[\n"\
+                                        +str(i[7]).decode('utf-8')+"]]>"
                     output.append(exec_output)
                 section.append(output)
             root.append(section)
@@ -246,6 +247,7 @@ class Printer(object):
 class ProcessCall(object):
     """Handles sub-processes/SSH/HTTP calls"""
     def __init__(self, host, username, password, keyfile):
+        # pylint: disable=R0246
         self.child_stdout = ''
         self.child_stat = 0
         self.child_stderr = ''
@@ -283,7 +285,7 @@ class ProcessCall(object):
         except OSError as ex_error:
             self.child_stat = 255
             G_LOGGER.critical('Subprocess open exception: %s', ex_error)
-
+    # pylint: disable=R0287
     def proc_remote(self, cmd, host, username, password, keyfile):
         """Create SSH session and run the command"""
         try:
@@ -636,4 +638,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
