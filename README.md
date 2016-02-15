@@ -15,7 +15,7 @@
 
 
 ##  What is it?
-Collect system information suite is Python written collection of scripts to gather, collect and analyze system information from local or remote system running Linux operating system. Output of the script is XML structured stack of information about running environment.
+Collect system information suite is Python written collection of scripts to gather, collect and analyze system information from local or remote system running Linux operating system. Output of the script is XML structured information stack of running environment.
 
 
 ## The Latest Version

@@ -44,7 +44,7 @@ __status__ = "Production"
 # Logging settings
 G_LOGGER = logging.getLogger(__name__)
 G_LOGGER.setLevel(logging.DEBUG)
-G_LOG_HANDLER = logging.FileHandler("sys_info.log", "w")
+G_LOG_HANDLER = logging.FileHandler("sys-info-suite.log", "w")
 G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)-12s \
                                  %(levelname)s - %(message)s")
 G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
@@ -666,24 +666,16 @@ def run_config(arg, config):
                             config[device]['password'],
                             config[device]['keyfile'])
         printer = Printer(config[device]['output'])
-        if config[device]['device_type'] == "cimc":
-            if config[device]['user'] and config[device]['password']:
-                suite.run_module(config[device]['suite'])
-                printer.print_suite(suite)
-            else:
-                sys.stderr.write('User name or password required')
-                G_LOGGER.error('User name or password required')
-                sys.exit(2)
+
+        if arg.check:
+            suite.run_module(config[device]['suite'])
+            printer.print_check(suite)
+        elif arg.listing:
+            suite.list_modules()
+            printer.print_list(suite)
         else:
-            if arg.check:
-                suite.run_module(config[device]['suite'])
-                printer.print_check(suite)
-            elif arg.listing:
-                suite.list_modules()
-                printer.print_list(suite)
-            else:
-                suite.run_module(config[device]['suite'])
-                printer.print_suite(suite)
+            suite.run_module(config[device]['suite'])
+            printer.print_suite(suite)
         if arg.hashing:
             printer.print_hash()
 
