@@ -34,7 +34,7 @@ except ImportError:
 # Script information
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
-__version__ = "2.0.0"
+__version__ = "2.0.1"
 __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
@@ -52,51 +52,51 @@ G_LOGGER.addHandler(G_LOG_HANDLER)
 
 
 # VNET SLA output suite
-G_SUITE = ["cpupower_frequency_info",
-           "cpupower_idle_info",
-           "ethtool",
-           "lscpu",
-           "lspci",
-           "meminfo",
-           "proc_cpuinfo",
-           "proc_meminfo",
-           "bridges_status",
-           "centos_release",
-           "grub",
-           "cgroup_cpuset",
-           "grub_alt",
-           "installed_packages_dpkg",
-           "installed_packages_yum",
-           "kernel_version",
-           "links_status",
-           "linux_version",
-           "lsblk",
-           "lsmod",
-           "os_release",
-           "proc_cmdline",
-           "proc_mounts",
-           "ps",
-           "rhel_release",
-           "service",
-           "sysctl",
-           "sched_features",
-           "dtime",
-           "virsh_capabilities",
-           "virsh_domains",
-           "virsh_domains_xml",
-           "ovs_bridges_status",
-           "ovs_version",
-           "vpp_conf"]
+G_SUITE = ["linux_cpupower_frequency_info",
+           "linux_cpupower_idle_info",
+           "linux_ethtool",
+           "linux_lscpu",
+           "linux_lspci",
+           "linux_meminfo",
+           "linux_proc_cpuinfo",
+           "linux_proc_meminfo",
+           "linux_bridges_status",
+           "linux_centos_release",
+           "linux_grub",
+           "linux_cgroup_cpuset",
+           "linux_grub_alt",
+           "linux_installed_packages_dpkg",
+           "linux_installed_packages_yum",
+           "linux_kernel_version",
+           "linux_links_status",
+           "linux_linux_version",
+           "linux_lsblk",
+           "linux_lsmod",
+           "linux_os_release",
+           "linux_proc_cmdline",
+           "linux_proc_mounts",
+           "linux_ps",
+           "linux_rhel_release",
+           "linux_service",
+           "linux_sysctl",
+           "linux_sched_features",
+           "linux_dtime",
+           "linux_virsh_capabilities",
+           "linux_virsh_domains",
+           "linux_virsh_domains_xml",
+           "linux_ovs_bridges_status",
+           "linux_ovs_version",
+           "linux_vpp_conf"]
 
 # CIMC inventory output
-G_SUITE_UCS_FULL = ["compute_rack_unit"]
-G_SUITE_UCS = ["network_adapter_unit",
-               "equipment_psu",
-               "equipment_fan_module",
-               "compute_board",
-               "mgmt_controller",
-               "bios_unit",
-               "pci_equip_slot"]
+G_SUITE_UCS_FULL = ["cimc_compute_rack_unit"]
+G_SUITE_UCS = ["cimc_network_adapter_unit",
+               "cimc_equipment_psu",
+               "cimc_equipment_fan_module",
+               "cimc_compute_board",
+               "cimc_mgmt_controller",
+               "cimc_bios_unit",
+               "cimc_pci_equip_slot"]
 
 G_STACK_SECTION = {1: "Physical Infrastructure",
                    2: "Compute Hardware",
@@ -475,7 +475,7 @@ class OutputSuite(object):
         for mod_name in modules:
             if mod_name not in sys.modules:
                 try:
-                    loaded_mod = __import__("outputs.outputs_"+mod_name,
+                    loaded_mod = __import__("outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod,
                                            "outputs_"+mod_name)(self.pce)
@@ -496,6 +496,83 @@ class OutputSuite(object):
                     G_LOGGER.error('Error execution of output function "%s"',
                                    mod_name)
 
+    def run_all_linux_modules(self):
+        """Run all linux modules from package"""
+        path = os.path.join(os.path.dirname(__file__), "outputs")
+        modules = pkgutil.iter_modules(path=[path])
+        for _, mod_name, _ in modules:
+            if mod_name not in sys.modules and mod_name.startswith("linux"):
+                try:
+                    loaded_mod = __import__("outputs."+mod_name,
+                                            fromlist=[mod_name])
+                    loaded_class = getattr(loaded_mod, mod_name)(self.pce)
+                    loaded_class.run()
+                    self.suite_all += ((mod_name,
+                                        loaded_class.get_section(),
+                                        loaded_class.get_significance(),
+                                        loaded_class.get_description(),
+                                        loaded_class.get_version(),
+                                        loaded_class.get_command(),
+                                        loaded_class.get_status(),
+                                        loaded_class.get_output(),
+                                        str(DT.datetime.utcnow())+" UTC"),)
+                    G_LOGGER.debug('Return code: %s', loaded_class.get_status())
+                    # pylint: disable=W0703
+                except Exception:
+                    G_LOGGER.error('Error execution of output function "%s"',
+                                   mod_name)
+
+    def run_all_cimc_modules(self):
+        """Run all cimc modules from package"""
+        path = os.path.join(os.path.dirname(__file__), "outputs")
+        modules = pkgutil.iter_modules(path=[path])
+        for _, mod_name, _ in modules:
+            if mod_name not in sys.modules and mod_name.startswith("cimc"):
+                try:
+                    loaded_mod = __import__("outputs."+mod_name,
+                                            fromlist=[mod_name])
+                    loaded_class = getattr(loaded_mod, mod_name)(self.pce)
+                    loaded_class.run()
+                    self.suite_all += ((mod_name,
+                                        loaded_class.get_section(),
+                                        loaded_class.get_significance(),
+                                        loaded_class.get_description(),
+                                        loaded_class.get_version(),
+                                        loaded_class.get_command(),
+                                        loaded_class.get_status(),
+                                        loaded_class.get_output(),
+                                        str(DT.datetime.utcnow())+" UTC"),)
+                    G_LOGGER.debug('Return code: %s', loaded_class.get_status())
+                    # pylint: disable=W0703
+                except Exception:
+                    G_LOGGER.error('Error execution of output function "%s"',
+                                   mod_name)
+
+    def run_all_modules(self):
+        """Run all modules from package"""
+        path = os.path.join(os.path.dirname(__file__), "outputs")
+        modules = pkgutil.iter_modules(path=[path])
+        for _, mod_name, _ in modules:
+            if mod_name not in sys.modules:
+                try:
+                    loaded_mod = __import__("outputs."+mod_name,
+                                            fromlist=[mod_name])
+                    loaded_class = getattr(loaded_mod, mod_name)(self.pce)
+                    loaded_class.run()
+                    self.suite_all += ((mod_name,
+                                        loaded_class.get_section(),
+                                        loaded_class.get_significance(),
+                                        loaded_class.get_description(),
+                                        loaded_class.get_version(),
+                                        loaded_class.get_command(),
+                                        loaded_class.get_status(),
+                                        loaded_class.get_output(),
+                                        str(DT.datetime.utcnow())+" UTC"),)
+                    G_LOGGER.debug('Return code: %s', loaded_class.get_status())
+                    # pylint: disable=W0703
+                except Exception:
+                    G_LOGGER.error('Error execution of output function "%s"',
+                                   mod_name)
 
 def get_args():
     """Command line arguments handling"""
