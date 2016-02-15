@@ -477,8 +477,7 @@ class OutputSuite(object):
                 try:
                     loaded_mod = __import__("outputs."+mod_name,
                                             fromlist=[mod_name])
-                    loaded_class = getattr(loaded_mod,
-                                           "outputs_"+mod_name)(self.pce)
+                    loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     loaded_class.run()
                     self.suite_all += ((mod_name,
                                         loaded_class.get_section(),

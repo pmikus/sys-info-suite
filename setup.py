@@ -7,7 +7,7 @@ setup(
   author = 'Peter Mikus',
   author_email = 'pmikus@cisco.com',
   url = 'https://github.com/pmikus/sys-info-suite',
-  download_url = 'https://github.com/pmikus/sys-info-suite',
-  keywords = ['collecting', 'system', 'information', 'diff'], # arbitrary keywords
+  download_url = 'https://github.com/pmikus/sys-info-suite/tarball/2.0.0',
+  keywords = ['collecting', 'system', 'information', 'diff'],
   classifiers = [],
 )
