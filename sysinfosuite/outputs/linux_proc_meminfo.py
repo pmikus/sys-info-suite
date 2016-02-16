@@ -1,8 +1,8 @@
 # Modules
 import xml.etree.cElementTree as ET
-import collect
+import sysinfosuite.collect
 
-class linux_proc_meminfo(collect.OutputsBase):
+class linux_proc_meminfo(sysinfosuite.collect.OutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets Memmory information"

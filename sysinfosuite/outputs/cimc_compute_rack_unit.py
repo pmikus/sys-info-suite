@@ -1,8 +1,8 @@
 # Modules
 import xml.etree.cElementTree as ET
-import collect
+import sysinfosuite.collect
 
-class cimc_compute_rack_unit(collect.OutputsBase):
+class cimc_compute_rack_unit(sysinfosuite.collect.OutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets all UCS information"

@@ -1,8 +1,8 @@
 # Modules
 import xml.etree.cElementTree as ET
-import collect
+import sysinfosuite.collect
 
-class cimc_bios_unit(collect.OutputsBase):
+class cimc_bios_unit(sysinfosuite.collect.OutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets the UCS bios information"

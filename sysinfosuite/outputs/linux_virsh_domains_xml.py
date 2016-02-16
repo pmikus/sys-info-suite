@@ -1,8 +1,8 @@
 # Modules
 import xml.etree.cElementTree as ET
-import collect
+import sysinfosuite.collect
 
-class linux_virsh_domains_xml(collect.OutputsBase):
+class linux_virsh_domains_xml(sysinfosuite.collect.OutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Show the status of modules in the Linux Kernel"

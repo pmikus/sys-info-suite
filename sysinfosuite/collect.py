@@ -34,7 +34,7 @@ except ImportError:
 # Script information
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
-__version__ = "2.0.1"
+__version__ = "2.0.3"
 __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
@@ -453,7 +453,7 @@ class OutputSuite(object):
         for _, mod_name, _ in modules:
             if mod_name not in sys.modules:
                 try:
-                    loaded_mod = __import__("outputs."+mod_name,
+                    loaded_mod = __import__("sysinfosuite.outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     self.suite_all += ((mod_name,
@@ -475,7 +475,7 @@ class OutputSuite(object):
         for mod_name in modules:
             if mod_name not in sys.modules:
                 try:
-                    loaded_mod = __import__("outputs."+mod_name,
+                    loaded_mod = __import__("sysinfosuite.outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     loaded_class.run()
@@ -502,7 +502,7 @@ class OutputSuite(object):
         for _, mod_name, _ in modules:
             if mod_name not in sys.modules and mod_name.startswith("linux"):
                 try:
-                    loaded_mod = __import__("outputs."+mod_name,
+                    loaded_mod = __import__("sysinfosuite.outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     loaded_class.run()
@@ -528,7 +528,7 @@ class OutputSuite(object):
         for _, mod_name, _ in modules:
             if mod_name not in sys.modules and mod_name.startswith("cimc"):
                 try:
-                    loaded_mod = __import__("outputs."+mod_name,
+                    loaded_mod = __import__("sysinfosuite.outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     loaded_class.run()
@@ -554,7 +554,7 @@ class OutputSuite(object):
         for _, mod_name, _ in modules:
             if mod_name not in sys.modules:
                 try:
-                    loaded_mod = __import__("outputs."+mod_name,
+                    loaded_mod = __import__("sysinfosuite.outputs."+mod_name,
                                             fromlist=[mod_name])
                     loaded_class = getattr(loaded_mod, mod_name)(self.pce)
                     loaded_class.run()

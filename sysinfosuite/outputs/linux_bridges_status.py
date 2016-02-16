@@ -1,8 +1,8 @@
 # Modules
 import xml.etree.cElementTree as ET
-import collect
+import sysinfosuite.collect
 
-class linux_bridges_status(collect.OutputsBase):
+class linux_bridges_status(sysinfosuite.collect.OutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Inspect the ethernet bridge configuration in the linux kernel"
