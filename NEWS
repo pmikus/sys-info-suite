@@ -1,3 +1,9 @@
+v2.0.3
+-----------------
+    * PyPI and PyPItest compliance
+    * It is possible now to install via PIP
+    + Script can be used as module documentation will be updated soon
+
 v2.0.1
 -----------------
     * Grouping of modules
