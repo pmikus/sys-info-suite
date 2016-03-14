@@ -21,7 +21,7 @@ __status__ = "Production"
 
 # Logging settings
 G_LOGGER = logging.getLogger(__name__)
-G_LOGGER.setLevel(logging.INFO)
+G_LOGGER.setLevel(logging.NOTSET)
 G_LOG_HANDLER = logging.StreamHandler()
 G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)s \
                                  %(levelname)s - %(message)s")

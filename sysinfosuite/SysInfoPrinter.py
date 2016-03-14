@@ -18,7 +18,7 @@ __status__ = "Production"
 G_LOGGER = logging.getLogger(__name__)
 G_LOGGER.setLevel(logging.INFO)
 G_LOG_HANDLER = logging.StreamHandler()
-G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)-10s \
+G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)s \
                                  %(levelname)s - %(message)s")
 G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
 G_LOGGER.addHandler(G_LOG_HANDLER)
