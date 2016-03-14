@@ -2,6 +2,7 @@
 """Script for comparing captured information"""
 
 # Modules
+import SysInfoPrinter
 import sys
 import os
 import logging
@@ -27,16 +28,16 @@ except ImportError:
 # Script information
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
 
 # Logging settings
 G_LOGGER = logging.getLogger(__name__)
-G_LOGGER.setLevel(logging.DEBUG)
-G_LOG_HANDLER = logging.FileHandler("sys_info.log", "w")
-G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)-12s \
+G_LOGGER.setLevel(logging.NOTSET)
+G_LOG_HANDLER = logging.StreamHandler()
+G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)-10s \
                                  %(levelname)s - %(message)s")
 G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
 G_LOGGER.addHandler(G_LOG_HANDLER)
@@ -53,19 +54,7 @@ G_COL_WHITE = '\033[1;37m'
 G_COL_CRIMSON = '\033[1;38m'
 G_COL_RESET = '\033[1;m'
 
-
-class Printer(object):
-    """Handles all outputs to stderr, stdout, stdin and file."""
-    def __init__(self, file_name=''):
-        if file_name:
-            sys.stdout = file_name
-            sys.stderr = sys.__stderr__
-        else:
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
-
-
-class DiffXml(object):
+class SysInfoDiffXml(object):
     """Handles comparision of two files."""
     cmd = ""
 
@@ -91,7 +80,7 @@ class DiffXml(object):
             G_LOGGER.critical('Subprocess open exception: %s', ex_error)
             sys.exit(2)
 
-    def listing(self):
+    def diff_listing(self):
         """Process the diff"""
         try:
             selection = self.first.xpath("//section/function")
@@ -110,7 +99,7 @@ class DiffXml(object):
             sys.stderr.write('XPath eval error: '+str(ex_error)+'\n')
             G_LOGGER.error('XPath evaluation error: %s', ex_error)
 
-    def process(self, arg):
+    def diff_process(self, arg):
         """Process the diff"""
         try:
             if arg.section:
@@ -218,14 +207,13 @@ def get_args():
 def main():
     """Main function"""
     arg = get_args()
-    Printer(arg.output)
-    diff = DiffXml(arg.first, arg.second)
+    SysInfoPrinter.SysInfoPrinter(arg.output)
+    diff = SysInfoDiffXml(arg.first, arg.second)
 
     if arg.listing:
-        diff.listing()
+        diff.diff_listing()
     else:
-        diff.process(arg)
+        diff.diff_process(arg)
 
 if __name__ == "__main__":
     main()
-
