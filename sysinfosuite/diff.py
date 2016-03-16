@@ -2,20 +2,10 @@
 """Script for comparing captured information"""
 
 # Modules
+import SysInfoDiffXml
 import SysInfoPrinter
-import sys
-import os
 import logging
-import subprocess
-import tempfile
-try:
-    import lxml.etree
-except ImportError:
-    sys.stderr.write('LXML library is required to run the script.\n' \
-                     'To install the library run the following command:\n' \
-                     '\tUbuntu/Debian: apt-get install python-lxml\n' \
-                     '\tFedora/RHEL/CentOS: yum install python-lxml\n')
-    sys.exit(2)
+import sys
 try:
     import argparse
 except ImportError:
@@ -25,7 +15,7 @@ except ImportError:
                      '\tFedora/RHEL/CentOS: yum install python-argparse\n')
     sys.exit(2)
 
-# Script information
+# Module information
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
 __version__ = "1.1.1"
@@ -34,126 +24,18 @@ __email__ = "pmikus@cisco.com"
 __status__ = "Production"
 
 # Logging settings
-G_LOGGER = logging.getLogger(__name__)
-G_LOGGER.setLevel(logging.NOTSET)
-G_LOG_HANDLER = logging.StreamHandler()
-G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)-10s \
-                                 %(levelname)s - %(message)s")
-G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
-G_LOGGER.addHandler(G_LOG_HANDLER)
-
-# Color settings
-G_COL_GREY = '\033[1;30m'
-G_COL_RED = '\033[1;31m'
-G_COL_GREEN = '\033[1;32m'
-G_COL_YELLOW = '\033[1;33m'
-G_COL_BLUE = '\033[1;34m'
-G_COL_MAGENTA = '\033[1;35m'
-G_COL_CYAN = '\033[1;36m'
-G_COL_WHITE = '\033[1;37m'
-G_COL_CRIMSON = '\033[1;38m'
-G_COL_RESET = '\033[1;m'
-
-class SysInfoDiffXml(object):
-    """Handles comparision of two files."""
-    cmd = ""
-
-    def __init__(self, first, second):
-        self.first = lxml.etree.parse(first).getroot()
-        self.second = lxml.etree.parse(second).getroot()
-
-    @classmethod
-    def sdiff_exec(cls, cmd):
-        """Executes the diff"""
-        try:
-            G_LOGGER.info('Running sdiff (subprocess open): %s', cmd)
-            proc_open = subprocess.Popen(cmd,
-                                         shell=True,
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE,
-                                         close_fds=False)
-            child_stdout, _ = proc_open.communicate()
-            return child_stdout
-        except OSError as ex_error:
-            sys.stderr.write('Subprocess open exception: '+str(ex_error)+'\n')
-            G_LOGGER.critical('Subprocess open exception: %s', ex_error)
-            sys.exit(2)
-
-    def diff_listing(self):
-        """Process the diff"""
-        try:
-            selection = self.first.xpath("//section/function")
-            for elem1 in selection:
-                sys.stdout.write("Function: "\
-                                 +G_COL_GREEN\
-                                 +elem1.attrib['id']\
-                                 +G_COL_RESET\
-                                 +" (Significance: "\
-                                 +elem1.attrib['significance']\
-                                 +')\n')
-        except lxml.etree.XPathSyntaxError as ex_error:
-            sys.stderr.write('XPath syntax error: '+str(ex_error)+'\n')
-            G_LOGGER.error('XPath syntax error: %s', ex_error)
-        except lxml.etree.XPathEvalError as ex_error:
-            sys.stderr.write('XPath eval error: '+str(ex_error)+'\n')
-            G_LOGGER.error('XPath evaluation error: %s', ex_error)
-
-    def diff_process(self, arg):
-        """Process the diff"""
-        try:
-            if arg.section:
-                sel_first = self.first.xpath("//section[contains(@id, \
-                                             '"+arg.section+"')]")
-                sel_second = self.second.xpath("//section[contains(@id \
-                                               , '"+arg.section+"')]")
-            elif arg.function:
-                sel_first = self.first.xpath("//section/function[contains \
-                                             (@id, '"+arg.function+"')]")
-                sel_second = self.second.xpath("//section/function[contains \
-                                               (@id, '"+arg.function+"')]")
-            elif arg.significance:
-                sel_first = self.first.xpath("//section/function[contains \
-                                     (@significance, '"+arg.significance+"')]")
-                sel_second = self.second.xpath("//section/function[contains \
-                                     (@significance, '"+arg.significance+"')]")
-            elif arg.xpath:
-                sel_first = self.first.xpath(arg.xpath)
-                sel_second = self.second.xpath(arg.xpath)
-            else:
-                sel_first = self.first.xpath("//section/function")
-                sel_second = self.second.xpath("//section/function")
-
-            for elem1 in sel_first:
-                fd1, temp_path1 = tempfile.mkstemp(text=True)
-                file1 = os.fdopen(fd1, 'w+t')
-                fd2, temp_path2 = tempfile.mkstemp(text=True)
-                file2 = os.fdopen(fd2, 'w+t')
-                file1.write(lxml.etree.tostring(elem1))
-                file1.read()
-                for elem2 in sel_second:
-                    if elem1.attrib['id'] == elem2.attrib['id']:
-                        file2.write(lxml.etree.tostring(elem2))
-                file2.read()
-                if arg.changes:
-                    self.cmd = "sdiff -s -t -w "+arg.width\
-                               +" "+temp_path1+" "+temp_path2
-                else:
-                    self.cmd = "sdiff -t -w "+arg.width\
-                               +" "+temp_path1+" "+temp_path2
-                sys.stdout.write(self.sdiff_exec(self.cmd)+'\n')
-                os.remove(temp_path1)
-                os.remove(temp_path2)
-        except lxml.etree.XPathSyntaxError as ex_error:
-            sys.stderr.write('XPath syntax error: '+str(ex_error)+'\n')
-            G_LOGGER.error('XPath syntaxt error: %s', ex_error)
-        except lxml.etree.XPathEvalError as ex_error:
-            sys.stderr.write('XPath eval error: '+str(ex_error)+'\n')
-            G_LOGGER.error('XPath evaluation error: %s', ex_error)
-
+LOGGER = logging.getLogger()
+#LOGGER.setLevel(logging.INFO)
+LOGHANDLER = logging.StreamHandler()
+LOGHANDLER.setLevel(logging.DEBUG)
+LOGFORMAT = logging.Formatter('%(asctime)s: %(levelname)-8s - %(name)s' \
+                                  + '- %(threadName)-12s - %(message)s')
+LOGHANDLER.setFormatter(LOGFORMAT)
+LOGGER.addHandler(LOGHANDLER)
 
 def get_args():
     """Handles command line arguments."""
+
     parser = argparse.ArgumentParser(description='Script for comparing \
                                      captured information')
     parser.add_argument('--first',
@@ -204,16 +86,15 @@ def get_args():
         parser.error(str(msg))
 
 
-def main():
-    """Main function"""
-    arg = get_args()
-    SysInfoPrinter.SysInfoPrinter(arg.output)
-    diff = SysInfoDiffXml(arg.first, arg.second)
-
-    if arg.listing:
-        diff.diff_listing()
-    else:
-        diff.diff_process(arg)
-
 if __name__ == "__main__":
-    main()
+    D_ARG = get_args()
+    D_PRINTER = SysInfoPrinter.SysInfoPrinter(D_ARG.output)
+    D_XML = SysInfoDiffXml.SysInfoDiffXml(D_ARG.first, D_ARG.second)
+
+    if D_ARG.listing:
+        sys.stderr.write('First file:\n')
+        D_PRINTER.print_xml_function_list(D_XML.first)
+        sys.stderr.write('Second file:\n')
+        D_PRINTER.print_xml_function_list(D_XML.second)
+    else:
+        D_XML.diff_process(D_ARG)

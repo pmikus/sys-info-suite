@@ -6,7 +6,6 @@ commands"""
 import SysInfoScheduler
 import SysInfoPrinter
 import logging
-import os
 import sys
 try:
     import argparse
@@ -26,13 +25,14 @@ __email__ = "pmikus@cisco.com"
 __status__ = "Production"
 
 # Logging settings
-G_LOGGER = logging.getLogger(__name__)
-G_LOGGER.setLevel(logging.NOTSET)
-G_LOG_HANDLER = logging.StreamHandler()
-G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)s \
-                                 %(levelname)s - %(message)s")
-G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
-G_LOGGER.addHandler(G_LOG_HANDLER)
+LOGGER = logging.getLogger()
+#LOGGER.setLevel(logging.INFO)
+LOGHANDLER = logging.StreamHandler()
+LOGHANDLER.setLevel(logging.DEBUG)
+LOGFORMAT = logging.Formatter('%(asctime)s: %(levelname)-8s - %(name)s' \
+                                  + '- %(threadName)-12s - %(message)s')
+LOGHANDLER.setFormatter(LOGFORMAT)
+LOGGER.addHandler(LOGHANDLER)
 
 def get_args():
     """Command line arguments handling"""
@@ -52,9 +52,9 @@ def get_args():
 
 
 if __name__ == "__main__":
-    """Main function"""
-    arg = get_args()
-    output = SysInfoScheduler.SysInfoScheduler()
-    output.add_external_scheduler(arg.ini)
-    output.run_scheduler()
-    SysInfoPrinter.SysInfoPrinter('').print_scheduler_output(output)
+    R_ARG = get_args()
+    R_PRINTER = SysInfoPrinter.SysInfoPrinter(R_ARG.output)
+    R_SCHED = SysInfoScheduler.SysInfoScheduler()
+    R_SCHED.add_external_scheduler(R_ARG.ini)
+    R_SCHED.run_scheduler()
+    R_PRINTER.print_scheduler_output(R_SCHED)

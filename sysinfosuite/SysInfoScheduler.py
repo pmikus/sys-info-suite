@@ -4,12 +4,10 @@ commands"""
 # Modules
 import csv
 import datetime
-import threading
-import sched
 import logging
-import os
 import sys
 import subprocess
+import threading
 
 # Module information
 __author__ = "Peter Mikus"
@@ -19,14 +17,8 @@ __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
 
-# Logging settings
-G_LOGGER = logging.getLogger(__name__)
-G_LOGGER.setLevel(logging.NOTSET)
-G_LOG_HANDLER = logging.StreamHandler()
-G_LOG_FORMAT = logging.Formatter("%(asctime)s: %(name)s - %(threadName)s \
-                                 %(levelname)s - %(message)s")
-G_LOG_HANDLER.setFormatter(G_LOG_FORMAT)
-G_LOGGER.addHandler(G_LOG_HANDLER)
+LOGGER = logging.getLogger(__name__)
+LOGGER.addHandler(logging.NullHandler())
 
 class SysInfoScheduler(object):
     """Handles scheduling and executing subprocess in threads"""
@@ -40,7 +32,7 @@ class SysInfoScheduler(object):
         """Executes the process"""
         exec_start = str(datetime.datetime.now())
         try:
-            G_LOGGER.info('Running subprocess open: %s', cmd)
+            LOGGER.info('Running subprocess open: %s', cmd)
             proc_open = subprocess.Popen(cmd,
                                          shell=True,
                                          stdin=subprocess.PIPE,
@@ -51,7 +43,7 @@ class SysInfoScheduler(object):
             child_stat = proc_open.wait()
 
             with self.lock:
-                G_LOGGER.debug('Acquired lock')
+                LOGGER.debug('Acquired lock')
                 self.dynamic_all += ((exec_start,
                                       cmd,
                                       child_stdout,
@@ -59,13 +51,13 @@ class SysInfoScheduler(object):
                                       child_stat,
                                       str(datetime.datetime.now())),)
         except OSError as ex_error:
-            G_LOGGER.critical('Subprocess open exception: %s', ex_error)
+            LOGGER.exception('Subprocess open exception: %s', ex_error)
             sys.exit(2)
 
     def add_internal_scheduler(self, sched_arr):
         """Add scheduler items from array"""
         for item in sched_arr:
-            G_LOGGER.debug('Scheduling thread: %s', item[1])
+            LOGGER.debug('Scheduling thread: %s', item[1])
             self.dynamic_thrd += (threading.Timer(item[0],
                                                   self.process_exec,
                                                   [item[1]]),)
@@ -73,22 +65,22 @@ class SysInfoScheduler(object):
     def add_external_scheduler(self, sched_file):
         """Add scheduler items from file"""
         try:
-            with open(sched_file) as file:
-                reader = csv.reader(file)
+            with open(sched_file) as csv_file:
+                reader = csv.reader(csv_file)
                 for row in reader:
-                    G_LOGGER.debug('Scheduling thread: %s', row[1])
+                    LOGGER.debug('Scheduling thread: %s', row[1])
                     self.dynamic_thrd += (threading.Timer(int(row[0]),
                                                           self.process_exec,
                                                           [row[1]]),)
                     # pylint: disable=W0703
         except Exception as ex_error:
-            G_LOGGER.error('Error reading configuration file: %s', ex_error)
+            LOGGER.exception('Error reading configuration file: %s', ex_error)
 
     def run_scheduler(self):
         """Starts scheduled threads and waits to join them"""
-        G_LOGGER.info('Executing scheduled items')
+        LOGGER.info('Executing scheduled items')
         for thrd in self.dynamic_thrd:
-            G_LOGGER.debug('Executing thread: %s', thrd.getName())
+            LOGGER.debug('Executing thread: %s', thrd.getName())
             thrd.setDaemon(True)
             thrd.start()
 
