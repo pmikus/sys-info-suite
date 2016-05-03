@@ -212,4 +212,4 @@ Contect of this repository is licensed under GPLv3. Please read the file called 
 Peter Mikus <pmikus@cisco.com>. Complete list of contributors and co-authors is located in file [AUTHORS.md](https://github.com/pmikus/sys-info-suite/blob/master/AUTHORS.md)
 
 ## Version
-Collect system information script 2.0.3, released February 2016.
+Collect system information script 2.1.0, released May 2016.
