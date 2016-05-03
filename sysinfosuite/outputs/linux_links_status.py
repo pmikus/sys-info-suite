@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_links_status(sysinfosuite.collect.OutputsBase):
+class linux_links_status(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets network device information"

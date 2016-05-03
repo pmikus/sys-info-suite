@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_virsh_domains(sysinfosuite.collect.OutputsBase):
+class linux_virsh_domains(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets the list of running KVM domains from"

@@ -1,8 +1,9 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+import lxml.etree
 
-class linux_virsh_capabilities(sysinfosuite.collect.OutputsBase):
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
+
+class linux_virsh_capabilities(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets the KVM capabilities"
@@ -16,6 +17,6 @@ class linux_virsh_capabilities(sysinfosuite.collect.OutputsBase):
 
     def parse_to_xml(self):
         try:
-            self.output = ET.XML(self.output)
+            self.output = lxml.etree.XML(self.output)
         except Exception:
             pass

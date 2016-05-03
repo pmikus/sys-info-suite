@@ -3,8 +3,6 @@
 commands"""
 
 # Modules
-import SysInfoScheduler
-import SysInfoPrinter
 import logging
 import sys
 try:
@@ -15,6 +13,9 @@ except ImportError:
                      '\tUbuntu/Debian: apt-get install python-argparse\n' \
                      '\tFedora/RHEL/CentOS: yum install python-argparse\n')
     sys.exit(2)
+
+from sysinosuite.SysInfoScheduler import SysInfoScheduler
+from sysinosuite.SysInfoPrinter import SysInfoPrinter
 
 # Module information
 __author__ = "Peter Mikus"
@@ -30,7 +31,7 @@ LOGGER = logging.getLogger()
 LOGHANDLER = logging.StreamHandler()
 LOGHANDLER.setLevel(logging.DEBUG)
 LOGFORMAT = logging.Formatter('%(asctime)s: %(levelname)-8s - %(name)s' \
-                                  + '- %(threadName)-12s - %(message)s')
+                              + '- %(threadName)-12s - %(message)s')
 LOGHANDLER.setFormatter(LOGFORMAT)
 LOGGER.addHandler(LOGHANDLER)
 
@@ -53,8 +54,8 @@ def get_args():
 
 if __name__ == "__main__":
     R_ARG = get_args()
-    R_PRINTER = SysInfoPrinter.SysInfoPrinter(R_ARG.output)
-    R_SCHED = SysInfoScheduler.SysInfoScheduler()
+    R_PRINTER = SysInfoPrinter(R_ARG.output)
+    R_SCHED = SysInfoScheduler()
     R_SCHED.add_external_scheduler(R_ARG.ini)
     R_SCHED.run_scheduler()
     R_PRINTER.print_scheduler_output(R_SCHED)

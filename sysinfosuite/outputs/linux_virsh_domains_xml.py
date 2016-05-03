@@ -1,8 +1,9 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+import lxml.etree
 
-class linux_virsh_domains_xml(sysinfosuite.collect.OutputsBase):
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
+
+class linux_virsh_domains_xml(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Show the status of modules in the Linux Kernel"
@@ -16,15 +17,15 @@ class linux_virsh_domains_xml(sysinfosuite.collect.OutputsBase):
         self.status = ""
 
     def run(self):
-        self.pce.proc_exec(self.cmd1, "")
-        self.output = self.pce.proc_output()
-        self.status = self.pce.proc_stat()
-        root = ET.Element("virsh_domains")
+        self.pce.execute_process(self.cmd1, "")
+        self.output = self.pce.get_process_output()
+        self.status = self.pce.get_process_status()
+        root = lxml.etree.Element("virsh_domains")
         if not self.status:
             for domain in self.output.split():
-                self.pce.proc_exec(self.cmd+" "+domain, "")
+                self.pce.execute_process(self.cmd+" "+domain, "")
                 try:
-                    root.insert(0, ET.XML(self.pce.proc_output()))
+                    root.insert(0, lxml.etree.XML(self.pce.get_process_output()))
                 except:
                     pass
         self.output = root

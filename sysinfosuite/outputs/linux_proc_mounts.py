@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_proc_mounts(sysinfosuite.collect.OutputsBase):
+class linux_proc_mounts(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets mounted FS information from target device"

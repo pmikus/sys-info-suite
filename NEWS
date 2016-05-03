@@ -1,3 +1,10 @@
+v2.1.0
+-----------------
+    * Cleaning code, refactor, split into files
+    + Adding simple scheduler
+    + LXML is now default xml parser
+
+
 v2.0.3
 -----------------
     * PyPI and PyPItest compliance

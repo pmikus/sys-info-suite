@@ -1,8 +1,9 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+import lxml.etree
 
-class linux_dtime(sysinfosuite.collect.OutputsBase):
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
+
+class linux_dtime(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets the current date and time"
@@ -15,6 +16,6 @@ class linux_dtime(sysinfosuite.collect.OutputsBase):
         self.status = ""
 
     def parse_to_xml(self):
-        root = ET.Element("time")
+        root = lxml.etree.Element("time")
         root.text = str(self.output).rstrip()
         self.output = root

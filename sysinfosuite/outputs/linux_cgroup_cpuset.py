@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_cgroup_cpuset(sysinfosuite.collect.OutputsBase):
+class linux_cgroup_cpuset(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets cgroup CPU information from target device"

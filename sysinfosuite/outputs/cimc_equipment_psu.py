@@ -1,8 +1,9 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+import lxml.etree
 
-class cimc_equipment_psu(sysinfosuite.collect.OutputsBase):
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
+
+class cimc_equipment_psu(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets the UCS PSU information"
@@ -15,12 +16,13 @@ class cimc_equipment_psu(sysinfosuite.collect.OutputsBase):
         self.status = ""
 
     def run(self):
-        self.pce.proc_ucs240(self.cmd, "")
-        self.output = self.pce.proc_output()
-        self.status = self.pce.proc_stat()
+        self.pce.get_bios_from_ucs240(self.cmd)
+        self.output = self.pce.get_process_output()
+        self.status = self.pce.get_process_status()
 
     def parse_to_xml(self):
         try:
-            self.output = ET.XML(self.output)
+            parser = lxml.etree.XMLParser(remove_blank_text=True)
+            self.output = lxml.etree.fromstring(self.output, parser)
         except Exception:
             pass

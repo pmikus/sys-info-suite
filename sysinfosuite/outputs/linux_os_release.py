@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_os_release(sysinfosuite.collect.OutputsBase):
+class linux_os_release(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets generic release information from target device"

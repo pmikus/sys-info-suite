@@ -1,10 +1,8 @@
 """Module for comparing two xml files"""
 
-# Modules
-import sys
-import os
 import logging
-import subprocess
+import os
+import sys
 import tempfile
 try:
     import lxml.etree
@@ -15,25 +13,14 @@ except ImportError:
                      '\tFedora/RHEL/CentOS: yum install python-lxml\n')
     sys.exit(2)
 
-# Script information
+from sysinfosuite.SysInfoProcessCall import SysInfoProcessCall
+
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
-__version__ = "1.1.1"
+__version__ = "2.1.0"
 __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
-
-# Color settings
-G_COL_GREY = '\033[1;30m'
-G_COL_RED = '\033[1;31m'
-G_COL_GREEN = '\033[1;32m'
-G_COL_YELLOW = '\033[1;33m'
-G_COL_BLUE = '\033[1;34m'
-G_COL_MAGENTA = '\033[1;35m'
-G_COL_CYAN = '\033[1;36m'
-G_COL_WHITE = '\033[1;37m'
-G_COL_CRIMSON = '\033[1;38m'
-G_COL_RESET = '\033[1;m'
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.addHandler(logging.NullHandler())
@@ -45,28 +32,24 @@ class SysInfoDiffXml(object):
     def __init__(self, first, second):
         self.first = lxml.etree.parse(first).getroot()
         self.second = lxml.etree.parse(second).getroot()
+        self.pce = SysInfoProcessCall()
+        self.diff_output = []
 
-    @classmethod
-    def sdiff_exec(cls, cmd):
-        """Executes the diff"""
+    def get_diff_output(self):
+        """Return result of diff.
 
-        try:
-            LOGGER.info('Running sdiff (subprocess open): %s', cmd)
-            proc_open = subprocess.Popen(cmd,
-                                         shell=True,
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE,
-                                         close_fds=False)
-            child_stdout, _ = proc_open.communicate()
-            return child_stdout
-        except OSError as ex_error:
-            LOGGER.exception('Subprocess open exception: %s', ex_error)
-            sys.exit(2)
+        :return: result of diff
+        :rtype: string
+        """
+        return self.diff_output
 
     def diff_process(self, arg):
-        """Process the diff"""
+        """Process the diff.
 
+        :param arg: arguments from command line
+        :type arg: object
+        :return: nothing
+        """
         try:
             if arg.section:
                 sel_first = self.first.xpath("//section[contains(@id, \
@@ -107,12 +90,11 @@ class SysInfoDiffXml(object):
                 else:
                     self.cmd = "sdiff -t -w "+arg.width\
                                +" "+temp_path1+" "+temp_path2
-                sys.stdout.write(self.sdiff_exec(self.cmd)+'\n')
+                self.pce.execute_process(self.cmd)
+                self.diff_output.append(self.pce.get_process_stdout())
                 os.remove(temp_path1)
                 os.remove(temp_path2)
         except lxml.etree.XPathSyntaxError as ex_error:
-            sys.stderr.write('XPath syntax error: '+str(ex_error)+'\n')
-            LOGGER.exception('XPath syntaxt error: %s', ex_error)
+            LOGGER.exception('XPath syntax error: {}'.format(ex_error))
         except lxml.etree.XPathEvalError as ex_error:
-            sys.stderr.write('XPath eval error: '+str(ex_error)+'\n')
-            LOGGER.exception('XPath evaluation error: %s', ex_error)
+            LOGGER.exception('XPath evaluation error: {}'.format(ex_error))

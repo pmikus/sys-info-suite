@@ -1,8 +1,9 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+import lxml.etree
 
-class linux_rhel_release(sysinfosuite.collect.OutputsBase):
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
+
+class linux_rhel_release(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets RHEL release information (RHEL version and release)"
@@ -15,6 +16,6 @@ class linux_rhel_release(sysinfosuite.collect.OutputsBase):
         self.status = ""
 
     def parse_to_xml(self):
-        root = ET.Element("rhel_release")
+        root = lxml.etree.Element("rhel_release")
         root.text = str(self.output).rstrip()
         self.output = root

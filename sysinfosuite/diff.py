@@ -2,8 +2,6 @@
 """Script for comparing captured information"""
 
 # Modules
-import SysInfoDiffXml
-import SysInfoPrinter
 import logging
 import sys
 try:
@@ -15,10 +13,13 @@ except ImportError:
                      '\tFedora/RHEL/CentOS: yum install python-argparse\n')
     sys.exit(2)
 
+from sysinfosuite.SysInfoDiffXml import SysInfoDiffXml
+from sysinfosuite.SysInfoPrinter import SysInfoPrinter
+
 # Module information
 __author__ = "Peter Mikus"
 __license__ = "GPLv3"
-__version__ = "1.1.1"
+__version__ = "2.1.0"
 __maintainer__ = "Peter Mikus"
 __email__ = "pmikus@cisco.com"
 __status__ = "Production"
@@ -29,7 +30,7 @@ LOGGER = logging.getLogger()
 LOGHANDLER = logging.StreamHandler()
 LOGHANDLER.setLevel(logging.DEBUG)
 LOGFORMAT = logging.Formatter('%(asctime)s: %(levelname)-8s - %(name)s' \
-                                  + '- %(threadName)-12s - %(message)s')
+                               + '- %(threadName)-12s - %(message)s')
 LOGHANDLER.setFormatter(LOGFORMAT)
 LOGGER.addHandler(LOGHANDLER)
 
@@ -50,11 +51,11 @@ def get_args():
                         required=True)
     parser.add_argument('--section',
                         action='store',
-                        help='Display specific section',
+                        help='Compare specific section',
                         default='')
     parser.add_argument('--function',
                         action='store',
-                        help='Display specific function',
+                        help='Compare specific function',
                         default='')
     parser.add_argument('--xpath',
                         action='store',
@@ -62,7 +63,7 @@ def get_args():
                         default='')
     parser.add_argument('--significance',
                         action='store',
-                        help='Display specific function',
+                        help='Compare only functions with specified sign.',
                         default='')
     parser.add_argument('--listing',
                         action='store_true',
@@ -88,8 +89,8 @@ def get_args():
 
 if __name__ == "__main__":
     D_ARG = get_args()
-    D_PRINTER = SysInfoPrinter.SysInfoPrinter(D_ARG.output)
-    D_XML = SysInfoDiffXml.SysInfoDiffXml(D_ARG.first, D_ARG.second)
+    D_PRINTER = SysInfoPrinter(D_ARG.output)
+    D_XML = SysInfoDiffXml(D_ARG.first, D_ARG.second)
 
     if D_ARG.listing:
         sys.stderr.write('First file:\n')
@@ -98,3 +99,5 @@ if __name__ == "__main__":
         D_PRINTER.print_xml_function_list(D_XML.second)
     else:
         D_XML.diff_process(D_ARG)
+        D_PRINTER.print_diff_output(D_XML.get_diff_output())
+

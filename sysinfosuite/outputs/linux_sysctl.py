@@ -1,8 +1,7 @@
 # Modules
-import xml.etree.cElementTree as ET
-import sysinfosuite.collect
+from sysinfosuite.SysInfoOutputsBase import SysInfoOutputsBase
 
-class linux_sysctl(sysinfosuite.collect.OutputsBase):
+class linux_sysctl(SysInfoOutputsBase):
     def __init__(self, pc):
         self.pce = pc
         self.description = "Gets actual kernel parameters at runtime"
